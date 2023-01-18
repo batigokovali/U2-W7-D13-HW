@@ -4,28 +4,28 @@ const getBooks = async () => {
         let bookData = await res.json()
         renderBooks(bookData)
         queryToSearch(bookData)
+        addToCart()
+        skip () 
+        deleteFromCart ()
         console.log(bookData)
+        // call the functions from here!
     } catch(err) {
         console.log(err)
     }
 }
 getBooks()
 
-window.onload = () => {
-    addToCart ()
-    skip ()
-    console.log()
-}
+
 
 let booksContainer = document.querySelector(".row")
 const renderBooks = (bookData) => {
     const booksHTML = bookData.map(({asin, title, img, price, category}) =>{
     
-        return `<div class="card col-lg-4 col-md-3 col-sm-2 ">
+        return `<div class="card col-lg-3 col-md-6 col-sm-12 ">
         <img src="${img}" class="card-img-top" alt="...">
         <div class="card-body d-flex flex-column justify-content-center align-items-center">
           <h5 class="card-title">${title}</h5>
-          <p class="card-text book-price">Price: ${price}</p>
+          <p class="card-text book-price">Price: ${price}€</p>
           <p class="card-text">Category: ${category}</p>
           <p class="card-text">ASIN: ${asin}</p> 
   <button type="button" class="btn btn-secondary add-to-cart">Add to Cart</button>
@@ -47,11 +47,13 @@ function addToCart () {
     for (let i = 0; i< buttons.length; i++) {
         buttons[i].addEventListener("click", function (){
             containers[i].classList.toggle("border-success")
-            cart.innerHTML += `<p class="cart-item">${title[i].innerText}${price[i].innerText}</p>
-            <button type="button" class="btn btn-danger delete-from-cart cart-item">DELETE</button>`
+            cart.innerHTML += `<div class="cart-item">
+            <p >${title[i].innerText}${price[i].innerText}</p>
+            <button type="button" class="btn btn-danger delete-from-cart cart-item" onclick="deleteFromCart()">DELETE</button>
+            </div>`
         })
     }
-    deleteFromCart ()
+    
 }
 
 function skip () {
@@ -64,18 +66,9 @@ function skip () {
     }
 }
 
-function deleteFromCart () {
-    let buttons = document.querySelectorAll(".delete-from-cart")
-    let containers = document.querySelectorAll(".cart-item")
-    let cards = document.querySelectorAll(".card")
+function deleteFromCart (event) {
+   console.log(event.target)
     
-    for (let i = 0; i< buttons.length; i++) {
-        buttons[i].addEventListener("click", function (){
-            buttons[i].remove()
-            containers[i].remove()
-            cards[i].classList.remove("border-success")
-        })
-    }
 }
 
 function queryToSearch(bookData) {
