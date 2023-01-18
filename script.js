@@ -47,9 +47,11 @@ function addToCart () {
     for (let i = 0; i< buttons.length; i++) {
         buttons[i].addEventListener("click", function (){
             containers[i].classList.toggle("border-success")
-            cart.innerHTML += `<p>${title[i].innerText}${price[i].innerText}</p>`
+            cart.innerHTML += `<p class="cart-item">${title[i].innerText}${price[i].innerText}</p>
+            <button type="button" class="btn btn-danger delete-from-cart cart-item">DELETE</button>`
         })
     }
+    deleteFromCart ()
 }
 
 function skip () {
@@ -62,19 +64,54 @@ function skip () {
     }
 }
 
+function deleteFromCart () {
+    let buttons = document.querySelectorAll(".delete-from-cart")
+    let containers = document.querySelectorAll(".cart-item")
+    let cards = document.querySelectorAll(".card")
+    
+    for (let i = 0; i< buttons.length; i++) {
+        buttons[i].addEventListener("click", function (){
+            buttons[i].remove()
+            containers[i].remove()
+            cards[i].classList.remove("border-success")
+        })
+    }
+}
+
 function queryToSearch(bookData) {
 
     let user = document.querySelector("input")
-    user.addEventListener("keydown", (e) => {
+    user.addEventListener("keydown", function(){
         for (i = 0; i<bookData.length; i++)
         {
-            let value = e.target.value
-            if ( value && value.trim().length>2) {
-                value = value.trim().toLowerCase()
-            } else {
-
+            if (bookData[i].title.includes(user.value) === true)
+            {
+                console.log(bookData[i].title)
             }
         }
     })
 
 }
+
+function totalCost ()
+{
+    let costContainer = document.getElementById("total-cost")
+    let bookPrices = document.querySelectorAll(".book-price")
+    for (i = 0; i<bookPrices.length; i++)
+    {
+        costContainer.innerText = bookPrices[i].reduce((tempSum, currentElement) => {
+            return tempSum + currentElement
+        })
+    }
+}
+
+function emptyCart () {
+    let cart = document.querySelector(".dropdown-menu")
+    let cards = document.querySelectorAll(".card")
+    cart.innerHTML ="";
+    for (let i = 0; i< cards.length; i++) {
+        
+        cards[i].classList.remove("border-success")
+     }
+}
+
