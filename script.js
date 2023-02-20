@@ -21,7 +21,7 @@ let booksContainer = document.querySelector(".row")
 const renderBooks = (bookData) => {
     const booksHTML = bookData.map(({asin, title, img, price, category}) =>{
     
-        return `<div class="card col-lg-3 col-md-6 col-sm-12 ">
+        return `<div class="card col-lg-3 col-md-6 col-sm-12 data-asin="${asin}">
         <img src="${img}" class="card-img-top" alt="...">
         <div class="card-body d-flex flex-column justify-content-center align-items-center">
           <h5 class="card-title">${title}</h5>
@@ -49,7 +49,7 @@ function addToCart () {
             containers[i].classList.toggle("border-success")
             cart.innerHTML += `<div class="cart-item">
             <p >${title[i].innerText}${price[i].innerText}</p>
-            <button type="button" class="btn btn-danger delete-from-cart cart-item" onclick="deleteFromCart()">DELETE</button>
+            <button type="button" class="btn btn-danger delete-from-cart cart-item" onclick="deleteFromCart(this)">DELETE</button>
             </div>`
         })
     }
@@ -66,9 +66,9 @@ function skip () {
     }
 }
 
-function deleteFromCart (event) {
-   console.log(event.target)
-    
+const removeFromCart = (btn) => {
+    document.querySelector(`.card[data-asin="${btn.closest(".card").dataset.asin}"]`).classList.remove("border", "border-success");
+    const cart = document.getElementById("cart-row")
 }
 
 function queryToSearch(bookData) {
